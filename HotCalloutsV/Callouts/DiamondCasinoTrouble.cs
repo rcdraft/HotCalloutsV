@@ -48,13 +48,14 @@ namespace HotCalloutsV.Callouts
             susB.IsFriendly = false;
             susB.Sprite = BlipSprite.Enemy;
             susB.IsRouteEnabled = true;
+            Game.DisplayHelp("Once you arrived, stand close to suspect and press Y.");
             return base.OnCalloutAccepted();
         }
 
         public override void Process()
         {
             base.Process();
-            if(!approach && Game.LocalPlayer.Character.DistanceTo2D(suspect) <= 3f)
+            if(!approach && Game.LocalPlayer.Character.DistanceTo2D(suspect) <= 3f && Game.IsKeyDown(System.Windows.Forms.Keys.Y))
             {
                 approach = true;
                 suspect.PlayAmbientSpeech("GENERIC_INSULT_HIGH");
