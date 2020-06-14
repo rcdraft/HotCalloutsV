@@ -13,6 +13,8 @@ namespace HotCalloutsV.Callouts
     public class FirearmAttackOnOfficer : Callout
     {
         private Vector3 spawnPoint;
+        private Ped officer;
+        private Ped suspect;
 
         public override bool OnBeforeCalloutDisplayed()
         {
@@ -21,12 +23,19 @@ namespace HotCalloutsV.Callouts
             ShowCalloutAreaBlipBeforeAccepting(spawnPoint, 30f);
             AddMinimumDistanceCheck(20f, spawnPoint);
 
-            CalloutMessage = "Car Thief spotted";
+            CalloutMessage = "Shots fired at an Officer";
             CalloutPosition = spawnPoint;
 
             Functions.PlayScannerAudioUsingPosition("ATTENTION_ALL_UNITS WE_HAVE CRIME_SHOTS_FIRED_AT_OFFICER IN_OR_ON_POSITION", spawnPoint);
 
             return base.OnBeforeCalloutDisplayed();
+        }
+
+        public override bool OnCalloutAccepted()
+        {
+            suspect = new Ped(spawnPoint);
+            officer = new Ped();
+            return base.OnCalloutAccepted();
         }
     }
 }

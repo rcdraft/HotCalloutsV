@@ -11,7 +11,7 @@
     <AssemblyName>HotCalloutsV</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <Deterministic>true</Deterministic>
+    <Deterministic>false</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,16 +30,26 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="LSPD First Response">
-      <HintPath>..\..\..\..\..\..\Program Files\Epic Games\GTAV\plugins\LSPD First Response.dll</HintPath>
+    <Reference Include="LSPD First Response, Version=0.4.7383.491, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files\Epic Games\GTAVF\GTAV\plugins\LSPD First Response.dll</HintPath>
+    </Reference>
+    <Reference Include="RAGENativeUI">
+      <HintPath>..\..\..\..\..\..\Program Files\Epic Games\GTAVF\GTAV\RAGENativeUI.dll</HintPath>
     </Reference>
     <Reference Include="RagePluginHookSDK">
       <HintPath>D:\SDK\RagePluginHookSDK.dll</HintPath>
     </Reference>
+    <Reference Include="StopThePed">
+      <HintPath>..\..\..\..\..\..\Program Files\Epic Games\GTAVF\GTAV\plugins\LSPDFR\StopThePed.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -48,12 +59,27 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Callouts\CarThief.cs" />
+    <Compile Include="Callouts\EscapingPrisoner.cs" />
     <Compile Include="Callouts\DangerousDriver.cs" />
+    <Compile Include="Callouts\DiamondCasinoTrouble.cs" />
+    <Compile Include="Callouts\DocumentLack.cs" />
+    <Compile Include="EDocumentLackSituation.cs" />
     <Compile Include="Callouts\FirearmAttackOnOfficer.cs" />
+    <Compile Include="Common\ConfigStruct.cs" />
+    <Compile Include="Common\Intergreate.cs" />
     <Compile Include="Common\PedHelper.cs" />
     <Compile Include="Common\ScannerHelper.cs" />
+    <Compile Include="Common\CommonHelper.cs" />
     <Compile Include="Entry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>12.0.3</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -5,10 +5,11 @@ using Rage;
 
 namespace HotCalloutsV.Callouts
 {
-    [CalloutInfo("DangerousDriver", CalloutProbability.Medium)]
-    public class DangerousDriver : Callout
+    [CalloutInfo("EscapingPrisoner", CalloutProbability.Low)]
+    public class EscapingPrisoner : Callout
     {
         Ped suspect;
+        Ped prisoner;
         Vehicle suspectCar;
         Vector3 spawn;
         Blip blip;
@@ -16,59 +17,57 @@ namespace HotCalloutsV.Callouts
 
         public override bool OnBeforeCalloutDisplayed()
         {
-            Game.LogTrivial("[Dangerous Driver/HotCallouts] Initializing Instance > Dangerous Driver");
             spawn = World.GetNextPositionOnStreet(Game.LocalPlayer.Character.Position.Around(200f));
 
             ShowCalloutAreaBlipBeforeAccepting(spawn, 30f);
             AddMinimumDistanceCheck(20f, spawn);
 
-            Game.LogTrivial("[Dangerous Driver/HotCallouts] Initialized Instance > Dangerous Driver");
-            CalloutMessage = "Dangerous Driver";
+            CalloutMessage = "Escaping Prisoner";
             CalloutPosition = spawn;
 
-            Functions.PlayScannerAudioUsingPosition("CITIZENS_REPORT CRIME_DANGEROUS_DRIVING IN_OR_ON_POSITION", spawn);
-            Game.LogTrivial("[Dangerous Driver/HotCallouts] Displayed Instance > Dangerous Driver");
+            Functions.PlayScannerAudioUsingPosition("CITIZENS_REPORT CRIME_WANTED_FELON_ON_THE_LOOSE IN_OR_ON_POSITION", spawn);
+
             return base.OnBeforeCalloutDisplayed();
         }
 
         public override bool OnCalloutAccepted()
         {
-            Game.LogTrivial("[Dangerous Driver/HotCallouts] Accepted Instance > Dangerous Driver");
             suspectCar = new Vehicle(spawn);
             suspectCar.IsPersistent = true;
-
-            Game.LogTrivial("[Dangerous Driver/HotCallouts] Spawned suspectCar (" + suspectCar.Model.Name + ") and set to Persistent");
+            ScannerHelper.RandomiseLicencePlate(suspectCar);
 
             suspect = suspectCar.CreateRandomDriver();
             suspect.IsPersistent = true;
             suspect.BlockPermanentEvents = true;
-            Game.LogTrivial($"[Dangerous Driver/HotCallouts] Spawned suspect ({suspect.Model.Name}) and set to Persistent & Block Events");
+
+            prisoner = new Ped("S_M_Y_PRISONER_01", suspect.Position.Around(5f), suspect.Heading);
+            prisoner.IsPersistent = true;
+            prisoner.WarpIntoVehicle(suspectCar, 0);
+            prisoner.AttachBlip();
 
             blip = suspect.AttachBlip();
             blip.IsFriendly = false;
             blip.IsRouteEnabled = true;
-            blip.Name = "Reckless Driver";
-            Game.LogTrivial("[Dangerous Driver/HotCallouts] Spawned blip and renamed to Reckless Driver");
+            blip.Name = "Escaping Prisoner";
 
-            suspect.Tasks.CruiseWithVehicle(15f, VehicleDrivingFlags.Emergency);
-            Game.LogTrivial("[Dangerous Driver/HotCallouts] Done > Dangerous Driver");
+            suspect.Tasks.CruiseWithVehicle(30f, VehicleDrivingFlags.Emergency);
+
             return base.OnCalloutAccepted();
         }
 
         public override void Process()
         {
             base.Process();
-            if(!pursuited && Functions.IsPedInPursuit(suspect))
+            if (!pursuited && Game.LocalPlayer.Character.Position.DistanceTo2D(suspect) <= 10f)
             {
                 pursuited = true;
-                Game.LogTrivial("[Dangerous Driver/HotCallouts] Fleeing > suspect");
-                ScannerHelper.DisplayDispatchDialogue("Dispatch", "suspect fleeing.");
+                Game.DisplayHelp("Press End once you have taken all the necessary actions.");
+                Game.DisplaySubtitle($"Pull the target~r~{Game.GetLocalizedString(suspectCar.Model.Name.ToUpper())}~s~ over.");
             }
 
-            if(!suspect.Exists() || suspect.IsDead || Functions.IsPedArrested(suspect))
+            if(pursuited && Game.IsKeyDown(System.Windows.Forms.Keys.End))
             {
-                Game.LogTrivial("[Dangerous Driver/HotCallouts] End > Dangerous Driving");
-                PedHelper.DeclareSubjectStatus(suspect);
+                ScannerHelper.DisplayDispatchDialogue("Dispatch", "We are code 4 on Escaping Prisoner.");
                 End();
             }
 
@@ -94,13 +93,11 @@ namespace HotCalloutsV.Callouts
         public override void End()
         {
             base.End();
-            Game.LogTrivial("[Dangerous Driver/HotCallouts] Ending Instance");
 
+            if (prisoner.Exists()) prisoner.Dismiss();
             if (suspect.Exists()) suspect.Dismiss();
             if (suspectCar.Exists()) suspectCar.Dismiss();
             if (blip.Exists()) blip.Delete();
-
-            Game.LogTrivial("[Dangerous Driver/HotCallouts] Peds dismissed");
         }
     }
 }
