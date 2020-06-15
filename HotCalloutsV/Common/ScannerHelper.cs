@@ -1,10 +1,6 @@
 ﻿using LSPD_First_Response.Mod.API;
 using Rage;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HotCalloutsV.Common
 {
@@ -32,7 +28,12 @@ namespace HotCalloutsV.Common
         public static uint ReportNormalCode4(string call)
         {
             Functions.PlayScannerAudio("ATTENTION_ALL_UNITS NO_ADDITIONAL_SUPPORT");
-            return DisplayDispatchDialogue("Dispatch", "We're code 4 on ~b~" + call + "~b~.");
+            return DisplayDispatchDialogue("Dispatch", "We're ~g~code 4~s~ on ~h~" + call + "~s~.");
+        }
+
+        public static void ReportEvent(string message)
+        {
+            Functions.PlayScannerAudio("ATTENTION_ALL_UNIT CITIZENS_REPORT " + message);
         }
 
         /// <summary>

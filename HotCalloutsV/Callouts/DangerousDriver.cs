@@ -2,6 +2,7 @@
 using LSPD_First_Response.Mod.API;
 using LSPD_First_Response.Mod.Callouts;
 using Rage;
+using System.Windows.Forms;
 
 namespace HotCalloutsV.Callouts
 {
@@ -13,6 +14,8 @@ namespace HotCalloutsV.Callouts
         Vector3 spawn;
         Blip blip;
         private bool pursuited;
+        private int situations;
+        private LHandle currentPursuit;
 
         public override bool OnBeforeCalloutDisplayed()
         {
@@ -23,7 +26,7 @@ namespace HotCalloutsV.Callouts
             AddMinimumDistanceCheck(20f, spawn);
 
             Game.LogTrivial("[Dangerous Driver/HotCallouts] Initialized Instance > Dangerous Driver");
-            CalloutMessage = "Dangerous Driver";
+            CalloutMessage = "Dangerous Driving";
             CalloutPosition = spawn;
 
             Functions.PlayScannerAudioUsingPosition("CITIZENS_REPORT CRIME_DANGEROUS_DRIVING IN_OR_ON_POSITION", spawn);
@@ -50,7 +53,30 @@ namespace HotCalloutsV.Callouts
             blip.Name = "Reckless Driver";
             Game.LogTrivial("[Dangerous Driver/HotCallouts] Spawned blip and renamed to Reckless Driver");
 
-            suspect.Tasks.CruiseWithVehicle(15f, VehicleDrivingFlags.Emergency);
+            situations = MathHelper.GetRandomInteger(0, 2);
+            string message;
+            string audioMessage;
+            switch(situations)
+            {
+                default:
+                case 0:
+                    suspect.Tasks.CruiseWithVehicle(15f, VehicleDrivingFlags.Emergency);
+                    message = "driving all over the road, but with normal speed";
+                    audioMessage = "CRIME_RECKLESS_DRIVER";
+                    break;
+                case 1:
+                    suspect.Tasks.CruiseWithVehicle(30f, VehicleDrivingFlags.Emergency);
+                    message = "driving all over the road and overspeed";
+                    audioMessage = "CRIME_SPEEDING_FELONY";
+                    break;
+                case 2:
+                    suspect.Tasks.CruiseWithVehicle(45f, VehicleDrivingFlags.Normal);
+                    message = "overspeeding";
+                    audioMessage = "CRIME_SPEEDING_FELONY";
+                    break;
+            }
+            ScannerHelper.ReportEvent(audioMessage);
+            ScannerHelper.DisplayDispatchNote("We received a 911 report of a vehicle " + message + ". Respond with Code 3.");
             Game.LogTrivial("[Dangerous Driver/HotCallouts] Done > Dangerous Driver");
             return base.OnCalloutAccepted();
         }
@@ -63,32 +89,21 @@ namespace HotCalloutsV.Callouts
                 pursuited = true;
                 Game.LogTrivial("[Dangerous Driver/HotCallouts] Fleeing > suspect");
                 ScannerHelper.DisplayDispatchDialogue("Dispatch", "suspect fleeing.");
+                currentPursuit = Functions.GetActivePursuit();
             }
 
-            if(!suspect.Exists() || suspect.IsDead || Functions.IsPedArrested(suspect))
+            if(pursuited && !Functions.IsPursuitStillRunning(currentPursuit))
+            {
+                pursuited = false;
+                ScannerHelper.DisplayDispatchDialogue("Dispatch", "The pursuit has ~g~concluded~s~.");
+            }
+
+            if(Game.IsKeyDown(Keys.End))
             {
                 Game.LogTrivial("[Dangerous Driver/HotCallouts] End > Dangerous Driving");
-                PedHelper.DeclareSubjectStatus(suspect);
+                ScannerHelper.ReportNormalCode4("Dangerous Driving");
                 End();
             }
-
-            /*if(!suspect == null || !suspect.Exists())
-            {
-                Game.DisplayNotification("<b>Dispatch: </b>Code 4, suspect has escaped.");
-                End();
-            }
-            
-            if(!suspect.IsAlive)
-            {
-                Game.DisplayNotification("<b>Dispatch: </b>Code 4, suspect down.");
-                End();
-            }
-            if (Functions.IsPedArrested(suspect))
-            {
-                Game.DisplayNotification("<b>Dispatch: </b>Code 4, suspect in custody.");
-                End();
-            }
-            */
         }
 
         public override void End()

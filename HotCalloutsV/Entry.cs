@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using HotCalloutsV.Common;
@@ -47,12 +48,19 @@ namespace HotCalloutsV
             covid = cfgStruct.useCovid19Specific;
             first = cfgStruct.firstRun;
             Game.LogTrivial("[HotCallouts] Initializing Integreate Features");
+#if DEBUG
+            Game.LogTrivial($"[HotCallouts] Warning: This build ({Assembly.GetExecutingAssembly().GetName().Version}) is bulit with Debug build options.");
+            Game.LogTrivial("[HotCallouts] This usually means it's contains untested codes and not production ready.");
+            Game.LogTrivial("[HotCallouts] USE AT YOUR OWN RISK.");
+            Game.DisplayNotification("web_lossantospolicedept", "web_lossantospolicedept", "HotCallouts", "build " + Assembly.GetExecutingAssembly().GetName().Version + "(debug)", "This is a ~r~<b>debug</b>~s~ build!");
+#endif
             AppDomain.CurrentDomain.AssemblyResolve += Common.Integreate.Resolve;
-            Game.LogTrivial("[Integreate/HotCallouts] Wait 5 millseconds to get all plugins to load");
-            GameFiber.Wait(5);
+            Game.LogTrivial("[Integreate/HotCallouts] Wait 3 millseconds to get all plugins to load");
+            GameFiber.Wait(3);
             Game.LogTrivial("[Integreate/HotCallouts] Initializing Integerate Manager");
             Integreate.Initialize();
             Game.LogTrivial("[HotCallouts] [OK] Initialized > Integreate Features");
+            Game.DisplayNotification("web_lossantospolicedept", "web_lossantospolicedept", "HotCallouts", "build " + Assembly.GetExecutingAssembly().GetName().Version, "~g~loaded successfully!~s~");
         }
 
         static void RegisterCallouts()

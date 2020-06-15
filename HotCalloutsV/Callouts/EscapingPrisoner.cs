@@ -14,6 +14,7 @@ namespace HotCalloutsV.Callouts
         Vector3 spawn;
         Blip blip;
         private bool pursuited;
+        private LHandle pursuit;
 
         public override bool OnBeforeCalloutDisplayed()
         {
@@ -61,8 +62,13 @@ namespace HotCalloutsV.Callouts
             if (!pursuited && Game.LocalPlayer.Character.Position.DistanceTo2D(suspect) <= 10f)
             {
                 pursuited = true;
-                Game.DisplayHelp("Press End once you have taken all the necessary actions.");
-                Game.DisplaySubtitle($"Pull the target~r~{Game.GetLocalizedString(suspectCar.Model.Name.ToUpper())}~s~ over.");
+                Game.DisplayHelp("Press End to end the callout.");
+                pursuit = Functions.CreatePursuit();
+                Functions.AddPedToPursuit(pursuit, suspect);
+                Functions.AddPedToPursuit(pursuit, prisoner);
+                Functions.SetPursuitIsActiveForPlayer(pursuit, true);
+                Functions.RequestBackup(suspect.Position, LSPD_First_Response.EBackupResponseType.Pursuit, LSPD_First_Response.EBackupUnitType.AirUnit);
+                Functions.RequestBackup(suspect.Position, LSPD_First_Response.EBackupResponseType.Pursuit, LSPD_First_Response.EBackupUnitType.LocalUnit);
             }
 
             if(pursuited && Game.IsKeyDown(System.Windows.Forms.Keys.End))
@@ -70,24 +76,6 @@ namespace HotCalloutsV.Callouts
                 ScannerHelper.DisplayDispatchDialogue("Dispatch", "We are code 4 on Escaping Prisoner.");
                 End();
             }
-
-            /*if(!suspect == null || !suspect.Exists())
-            {
-                Game.DisplayNotification("<b>Dispatch: </b>Code 4, suspect has escaped.");
-                End();
-            }
-            
-            if(!suspect.IsAlive)
-            {
-                Game.DisplayNotification("<b>Dispatch: </b>Code 4, suspect down.");
-                End();
-            }
-            if (Functions.IsPedArrested(suspect))
-            {
-                Game.DisplayNotification("<b>Dispatch: </b>Code 4, suspect in custody.");
-                End();
-            }
-            */
         }
 
         public override void End()
