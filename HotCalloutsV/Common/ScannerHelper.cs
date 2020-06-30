@@ -36,13 +36,11 @@ namespace HotCalloutsV.Common
             Functions.PlayScannerAudio("ATTENTION_ALL_UNIT CITIZENS_REPORT " + message);
         }
 
-        /// <summary>
-        /// Direct RandomiseLicensePlate directly copied from Albo1125.Common Project
-        /// Thanks, Albo1125
-        /// </summary>
-        /// <param name="vehicle"></param>
         public static void RandomiseLicencePlate(Vehicle vehicle)
         {
+            // This code is part of Albo1125.Common.
+            // Albo1125.Common is free software; it is licensed under GNU GPL version 3.
+            // Copyright (C) 2015-2019 Albo1125.
             if (vehicle)
             {
                 vehicle.LicensePlate = MathHelper.GetRandomInteger(9).ToString() +

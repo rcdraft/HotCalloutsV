@@ -1,12 +1,26 @@
-﻿using HotCalloutsV.Common;
+﻿// Copyright (C) RelaperCrystal 2019, 2020
+// This file is part of HotCallouts for Grand Theft Auto V.
+
+// HotCallouts for Grand Theft Auto V (or HotCalloutsV)
+// is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+
+// HotCalloutsV is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+
+// You should have received a copy of the GNU General Public License
+// along with HotCalloutsV.  If not, see <https://www.gnu.org/licenses/>. 
+
+using HotCalloutsV.Common;
+using HotCalloutsV.Entities;
+using HotCalloutsV.Entities.Bases;
 using LSPD_First_Response.Mod.API;
 using LSPD_First_Response.Mod.Callouts;
 using Rage;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HotCalloutsV.Callouts
 {
@@ -17,12 +31,12 @@ namespace HotCalloutsV.Callouts
         Ped security;
         Blip b;
         Blip susB;
+        DialogueSubject ds;
         private Vector3 spawnPoint;
-        private bool approach;
 
         public override bool OnBeforeCalloutDisplayed()
         {
-            spawnPoint = new Vector3(92f, 48f, 81f);
+            spawnPoint = new Vector3(933f, 48f, 81f);
 
             ShowCalloutAreaBlipBeforeAccepting(spawnPoint, 30f);
             AddMinimumDistanceCheck(20f, spawnPoint);
@@ -48,6 +62,11 @@ namespace HotCalloutsV.Callouts
             susB.IsFriendly = false;
             susB.Sprite = BlipSprite.Enemy;
             susB.IsRouteEnabled = true;
+            ds = new DialogueSubject(suspect);
+            ds.SpeechAble.Add(0, new TextEntire("~b~You~s~: Hi. What are you doing here?"));
+            ds.SpeechAble.Add(2, new TextEntire("~r~Suspect~s~: Why I need to tell you what I am doing?"));
+            ds.SpeechAble.Add(3, new TextEntire("~b~Security~s~: He's capturing the casino using camera."));
+            ds.SpeechAble.Add(4, new PursuitEntire("~r~Suspect~s~: Hell no!"));
             Game.DisplayHelp("Once you arrived, stand close to suspect and press Y.");
             return base.OnCalloutAccepted();
         }
@@ -55,18 +74,11 @@ namespace HotCalloutsV.Callouts
         public override void Process()
         {
             base.Process();
-            if(!approach && Game.LocalPlayer.Character.DistanceTo2D(suspect) <= 3f && Game.IsKeyDown(System.Windows.Forms.Keys.Y))
+            if(ds.CurrentCount != 4 && Game.LocalPlayer.Character.DistanceTo2D(suspect) <= 3f && Game.IsKeyDown(System.Windows.Forms.Keys.Y))
             {
-                approach = true;
-                suspect.PlayAmbientSpeech("GENERIC_INSULT_HIGH");
-                Functions.SetPedAsStopped(suspect, false);
-                LHandle pursuit = Functions.CreatePursuit();
-                Functions.AddPedToPursuit(pursuit, suspect);
-                Functions.SetPursuitIsActiveForPlayer(pursuit, true);
-                Functions.RequestBackup(suspect.Position, LSPD_First_Response.EBackupResponseType.Pursuit, LSPD_First_Response.EBackupUnitType.LocalUnit);
-                Functions.PlayScannerAudioUsingPosition("ATTENTION_ALL_UNITS OFFICERS_REPORT CRIME_RESIST_ARREST REQUEST_BACKUP", suspect.Position);
+                ds.Say();
             }
-            if(!suspect.Exists() || suspect.IsDead || Functions.IsPedArrested(suspect))
+            if(!suspect.Exists() || suspect.IsDeadOrDetained())
             {
                 End();
             }
@@ -75,7 +87,12 @@ namespace HotCalloutsV.Callouts
         public override void End()
         {
             PedHelper.DeclareSubjectStatus(suspect);
-            if (suspect.Exists()) suspect.Dismiss();
+            if (suspect.Exists())
+            {
+                Game.LogTrivial("[DiamondCasinoTrouble/HotCallouts] Attmepting to dismiss suspect...");
+                if (!Functions.IsPedArrested(suspect)) suspect.Dismiss();
+                else Game.LogTrivial("[DiamondCasinoTrouble/HotCallouts] Suspect was not dismissed to prevent them taking over player vehicle.");
+            }
             if (security.Exists()) security.Dismiss();
             if (susB.Exists()) susB.Delete();
             if (b.Exists()) b.Delete();

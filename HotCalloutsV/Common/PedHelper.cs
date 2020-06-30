@@ -17,7 +17,11 @@ namespace HotCalloutsV.Common
     internal static class PedHelper
     {
         internal static List<Ped> ArrestedBySTP = new List<Ped>();
-        public static bool IsDeadOrDeatined(this Ped ped) => Integreate.StopThePed && ped.IsDead && ArrestedBySTP.Contains(ped);
+        public static bool IsDeadOrDetained(this Ped ped) 
+        {
+            if (Functions.IsPedArrested(ped)) return true;
+            return Integreate.StopThePed && ped.IsDead && ArrestedBySTP.Contains(ped);
+        }
 
         public static uint DeclareSubjectStatus(Ped ped)
         {

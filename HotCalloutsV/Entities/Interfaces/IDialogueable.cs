@@ -15,11 +15,15 @@
 // You should have received a copy of the GNU General Public License
 // along with HotCalloutsV.  If not, see <https://www.gnu.org/licenses/>. 
 
-namespace HotCalloutsV.Common
+using System.Collections.Generic;
+
+namespace HotCalloutsV.Entities.Interfaces
 {
-    internal struct ConfigStruct
+    internal interface IDialogueable
     {
-        public bool firstRun { get; set; }
-        public bool useCovid19Specific { get; set; }
+        Dictionary<int, ChatEntire> SpeechAble { get; }
+        int CurrentCount { get; set; }
+        void Say();
+        void Say(int specified);
     }
 }

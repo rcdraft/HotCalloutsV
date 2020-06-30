@@ -15,11 +15,35 @@
 // You should have received a copy of the GNU General Public License
 // along with HotCalloutsV.  If not, see <https://www.gnu.org/licenses/>. 
 
-namespace HotCalloutsV.Common
+using HotCalloutsV.Entities.Interfaces;
+using Rage;
+
+namespace HotCalloutsV.Entities
 {
-    internal struct ConfigStruct
+    public class TextEntire : ChatEntire
     {
-        public bool firstRun { get; set; }
-        public bool useCovid19Specific { get; set; }
+        public string Context { get; private set; }
+
+        public override bool IsFunctional { get => false; }
+
+        public override void Function()
+        {
+            Game.DisplaySubtitle(Context);
+        }
+
+        public override void Function(Ped p)
+        {
+            Function();
+        }
+
+        public TextEntire(string text)
+        {
+            Context = text;
+        }
+
+        public static implicit operator TextEntire(string text)
+        {
+            return new TextEntire(text);
+        }
     }
 }

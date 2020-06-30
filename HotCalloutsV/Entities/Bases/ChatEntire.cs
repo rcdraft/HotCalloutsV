@@ -15,11 +15,23 @@
 // You should have received a copy of the GNU General Public License
 // along with HotCalloutsV.  If not, see <https://www.gnu.org/licenses/>. 
 
-namespace HotCalloutsV.Common
+using Rage;
+
+namespace HotCalloutsV.Entities.Interfaces
 {
-    internal struct ConfigStruct
+    public abstract class ChatEntire
     {
-        public bool firstRun { get; set; }
-        public bool useCovid19Specific { get; set; }
+        string Context { get; }
+        public abstract bool IsFunctional { get; }
+        public virtual void Function()
+        {
+            if (!string.IsNullOrEmpty(Context)) Game.DisplaySubtitle(Context);
+        }
+
+        public virtual void Function(Ped p)
+        {
+            Function();
+        }
+        
     }
 }

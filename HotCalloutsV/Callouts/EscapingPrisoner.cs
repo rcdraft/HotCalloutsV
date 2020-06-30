@@ -62,7 +62,6 @@ namespace HotCalloutsV.Callouts
             if (!pursuited && Game.LocalPlayer.Character.Position.DistanceTo2D(suspect) <= 10f)
             {
                 pursuited = true;
-                Game.DisplayHelp("Press End to end the callout.");
                 pursuit = Functions.CreatePursuit();
                 Functions.AddPedToPursuit(pursuit, suspect);
                 Functions.AddPedToPursuit(pursuit, prisoner);
@@ -71,7 +70,7 @@ namespace HotCalloutsV.Callouts
                 Functions.RequestBackup(suspect.Position, LSPD_First_Response.EBackupResponseType.Pursuit, LSPD_First_Response.EBackupUnitType.LocalUnit);
             }
 
-            if(pursuited && Game.IsKeyDown(System.Windows.Forms.Keys.End))
+            if(pursuited && pursuit != null && !Functions.IsPursuitStillRunning(pursuit))
             {
                 ScannerHelper.DisplayDispatchDialogue("Dispatch", "We are code 4 on Escaping Prisoner.");
                 End();

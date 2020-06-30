@@ -1,8 +1,10 @@
-﻿using LSPD_First_Response.Mod.API;
+﻿using HotCalloutsV.Common;
+using LSPD_First_Response.Mod.API;
 using LSPD_First_Response.Mod.Callouts;
 using Rage;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +17,8 @@ namespace HotCalloutsV.Callouts
         private Vector3 spawnPoint;
         private Ped officer;
         private Ped suspect;
+        private Blip suspectBlip;
+        private bool dead;
 
         public override bool OnBeforeCalloutDisplayed()
         {
@@ -34,8 +38,44 @@ namespace HotCalloutsV.Callouts
         public override bool OnCalloutAccepted()
         {
             suspect = new Ped(spawnPoint);
-            officer = new Ped();
+            suspect.BlockPermanentEvents = true;
+            suspect.IsPersistent = true;
+            officer = new Ped("s_m_y_cop_01", suspect.Position.Around(5f), suspect.Heading);
+            officer.BlockPermanentEvents = true;
+            officer.IsPersistent = true;
+            Functions.SetPedAsCop(officer);
+            officer.Inventory.GiveNewWeapon(WeaponHash.Pistol, short.MaxValue, true);
+            officer.Tasks.FightAgainst(suspect);
+            suspect.Inventory.GiveNewWeapon(WeaponHash.Pistol, short.MaxValue, true);
+            suspect.Tasks.FightAgainst(officer);
+            suspectBlip = suspect.AttachBlip();
+            suspectBlip.Sprite = BlipSprite.Enemy;
+            suspectBlip.IsFriendly = false;
+            suspectBlip.IsRouteEnabled = true;
+            suspectBlip.Color = Color.Red;
+            ScannerHelper.DisplayDispatchNote("There's a suspect shooting at an officer. Quick, before anything goes wrong.");
             return base.OnCalloutAccepted();
+        }
+
+        public override void Process()
+        {
+            if(!dead && officer.IsDead)
+            {
+                dead = true;
+                ScannerHelper.DisplayDispatchDialogue("Dispatch", "Officer down. ~r~Respond with code 99~s~.");
+                Functions.PlayScannerAudioUsingPosition("ATTENTION_ALL_UNITS WE_HAVE CRIME_OFFICER_DOWN IN_OR_ON_POSITION", officer.Position);
+            }
+            if(!suspect.Exists() || suspect.IsDeadOrDetained())
+            {
+                End();
+            }
+        }
+
+        public override void End()
+        {
+            base.End();
+            if (suspect.Exists() && !Functions.IsPedArrested(suspect)) suspect.Dismiss();
+            if (officer.Exists()) officer.Dismiss();
         }
     }
 }
