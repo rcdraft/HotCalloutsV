@@ -73,7 +73,7 @@ namespace HotCalloutsV.Callouts
                 {
                     case EDocumentLackSituation.Insurance:
                         Game.LogTrivial("INSURANCE determined");
-                        if (Integreate.StopThePed) suspectCar.SetInsurance((STPVehicleStatus)MathHelper.GetRandomInteger(0, 1));
+                        if (Integreate.StopThePed) suspectCar.SetInsurance((HCVehicleStatus)MathHelper.GetRandomInteger(0, 1));
                         Game.LogTrivial("INSURANCE set");
                         message = "The target vehicle has been reported as Uninsured or it's insurance has expired.";
                         break;
@@ -81,7 +81,7 @@ namespace HotCalloutsV.Callouts
                     default:
                     case EDocumentLackSituation.Registration:
                         Game.LogTrivial("REGISTRATION determined");
-                        if (Integreate.StopThePed) suspectCar.SetRegistration((STPVehicleStatus)MathHelper.GetRandomInteger(0, 1));
+                        if (Integreate.StopThePed) suspectCar.SetRegistration((HCVehicleStatus)MathHelper.GetRandomInteger(0, 1));
                         Game.LogTrivial("REGISTRATION set");
                         message = "The target vehicle has been reported as No registiration or it's expired.";
                         break;

@@ -56,19 +56,19 @@
   <ItemGroup>
     <Reference Include="LSPD First Response, Version=0.4.7383.491, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\Program Files\Epic Games\GTAVF\GTAV\plugins\LSPD First Response.dll</HintPath>
+      <HintPath>.\References\LSPD First Response.dll</HintPath>
     </Reference>
     <Reference Include="LSPDFR+">
-      <HintPath>D:\SDK\LSPDFR+.dll</HintPath>
+      <HintPath>.\References\LSPDFR+.dll</HintPath>
     </Reference>
     <Reference Include="RAGENativeUI">
-      <HintPath>..\..\..\..\..\..\Program Files\Epic Games\GTAVF\GTAV\RAGENativeUI.dll</HintPath>
+      <HintPath>.\References\RAGENativeUI.dll</HintPath>
     </Reference>
     <Reference Include="RagePluginHookSDK">
-      <HintPath>D:\SDK\RagePluginHookSDK.dll</HintPath>
+      <HintPath>.\References\RagePluginHookSDK.dll</HintPath>
     </Reference>
     <Reference Include="StopThePed">
-      <HintPath>..\..\..\..\..\..\Program Files\Epic Games\GTAVF\GTAV\plugins\LSPDFR\StopThePed.dll</HintPath>
+      <HintPath>.\References\StopThePed.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -81,7 +81,7 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
     <Reference Include="Traffic Policer">
-      <HintPath>..\..\..\..\..\..\Program Files\Epic Games\GTAVF\GTAV\plugins\lspdfr\Traffic Policer.dll</HintPath>
+      <HintPath>.\References\Traffic Policer.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -101,6 +101,7 @@
     <Compile Include="Common\PedHelper.cs" />
     <Compile Include="Common\ScannerHelper.cs" />
     <Compile Include="Common\CommonHelper.cs" />
+    <Compile Include="Entities\MenuFiber.cs" />
     <Compile Include="Entities\PursuitEntire.cs" />
     <Compile Include="Entities\TextEntire.cs" />
     <Compile Include="Entry.cs" />
@@ -116,6 +117,9 @@
     </PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>copy C:\Users\Ender\source\repos\HotCalloutsV\HotCalloutsV\bin\x64\Debug\HotCalloutsV.dll "C:\Program Files\Epic Games\GTAVF\GTAV\plugins\lspdfr\"</PostBuildEvent>
+    <PostBuildEvent>copy C:\Users\Ender\source\repos\HotCalloutsV\HotCalloutsV\bin\x64\Debug\HotCalloutsV.dll "C:\Program Files\Epic Games\GTAVF\GTAV\plugins\lspdfr\"
+copy C:\Users\Ender\source\repos\HotCalloutsV\HotCalloutsV\bin\x64\Debug\HotCalloutsV.pdb "C:\Program Files\Epic Games\GTAVF\GTAV\plugins\lspdfr\"
+echo Copied database and binary to plugins. Enjoy
+</PostBuildEvent>
   </PropertyGroup>
 </Project>
