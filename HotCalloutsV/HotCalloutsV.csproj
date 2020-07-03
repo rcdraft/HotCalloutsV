@@ -118,8 +118,8 @@
     </PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>copy C:\Users\Ender\source\repos\HotCalloutsV\HotCalloutsV\bin\x64\Debug\HotCalloutsV.dll "C:\Program Files\Epic Games\GTAVF\GTAV\plugins\lspdfr\"
-copy C:\Users\Ender\source\repos\HotCalloutsV\HotCalloutsV\bin\x64\Debug\HotCalloutsV.pdb "C:\Program Files\Epic Games\GTAVF\GTAV\plugins\lspdfr\"
+    <PostBuildEvent>copy C:\Programs\DevProjs\HotCalloutsV\HotCalloutsV\bin\x64\Debug\HotCalloutsV.dll "C:\Program Files\Epic Games\GTAVF\GTAV\plugins\lspdfr\"
+copy C:\Programs\DevProjs\HotCalloutsV\HotCalloutsV\bin\x64\Debug\HotCalloutsV.pdb "C:\Program Files\Epic Games\GTAVF\GTAV\plugins\lspdfr\"
 echo Copied database and binary to plugins. Enjoy
 </PostBuildEvent>
   </PropertyGroup>
