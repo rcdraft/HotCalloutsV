@@ -1,4 +1,7 @@
-﻿using HotCalloutsV.Common;
+﻿// Copyright (C) RelaperCrystal 2019, 2020
+// This file is part of HotCallouts for Grand Theft Auto V.
+
+using HotCalloutsV.Common;
 using LSPD_First_Response.Mod.API;
 using LSPD_First_Response.Mod.Callouts;
 using Rage;

@@ -1,15 +1,10 @@
-﻿using LSPD_First_Response.Engine.Scripting.Entities;
-using LSPD_First_Response.Mod.API;
+﻿// Copyright (C) RelaperCrystal 2019, 2020
+// This file is part of HotCallouts for Grand Theft Auto V.
+
+using LSPD_First_Response.Engine.Scripting.Entities;
 using Rage;
 using Rage.Native;
-using StopThePed.API;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Text;
-using System.Threading.Tasks;
 using Functions = LSPD_First_Response.Mod.API.Functions;
 
 namespace HotCalloutsV.Common
