@@ -20,22 +20,6 @@ This project aimed to recreate all of the call-outs in original IV version. The 
 
   A prisoner has been found in street along with other person. Pull them over, arrest all of them.
 
-### Callouts with Unresolvable Issued and Cannot Be Played
-
-- Lack of Document
-
-  - Uninsured Vehicle
-
-    A vehicle has been found uninsured. Go and pull over, make him a ticket.
-
-  - Unregistered Vehicle
-
-    A vehicle has been found without Registration. Go and pull over, make him a ticket.
-
-  *Reason of Cannot Be Played:* continuously reporting uncatchable `NullReferenceException` on `OnCalloutAccepted` method. 
-
-  *Request Contribution*: need some assistance to locate and resolve the uncatchable `NullReferenceException` - go to `NullReference.md` to gather information I have found.
-
 ### Callouts currently WIP
 
 * Visitors of Diamond Casino Resort causing trouble
@@ -43,6 +27,14 @@ This project aimed to recreate all of the call-outs in original IV version. The 
   A visitor of Diamond Casino & Resort causing trouble and does not want to leave. Make him leave. Beware, they can run away.
 
   * Dialogue system is currently being redone.
+  * You can play this callout by building this plugin in **Debug** options but it will, most likely crash.
+  
+* Firearm Attack on an Officer
+
+  A suspect attacking an officer using his firearm. Be quick, before anything goes wrong.
+
+  * It is not tested properly, and it's currently under active development.
+  * You can play this callout by building this plugin in **Debug** options but it is untested and may crash or `Code 4 - Disregard`.
 
 ## Known Issues
 
