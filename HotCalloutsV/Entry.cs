@@ -50,7 +50,9 @@ namespace HotCalloutsV
         {
 #if DEBUG
             Functions.RegisterCallout(typeof(Callouts.DiamondCasinoTrouble));
+            Functions.RegisterCallout(typeof(Callouts.FirearmAttackOnOfficer));
 #endif
+
             Functions.RegisterCallout(typeof(Callouts.CarThief));
             Functions.RegisterCallout(typeof(Callouts.DangerousDriver));
             Functions.RegisterCallout(typeof(Callouts.EscapingPrisoner));
