@@ -65,13 +65,15 @@ namespace HotCalloutsV.Callouts
             if (!pursuited && Game.LocalPlayer.Character.Position.DistanceTo2D(suspect) <= 10f)
             {
                 pursuited = true;
+				blip.Delete();
                 pursuit = Functions.CreatePursuit();
                 Functions.AddPedToPursuit(pursuit, suspect);
                 Functions.AddPedToPursuit(pursuit, prisoner);
                 Functions.SetPursuitIsActiveForPlayer(pursuit, true);
                 Functions.RequestBackup(suspect.Position, LSPD_First_Response.EBackupResponseType.Pursuit, LSPD_First_Response.EBackupUnitType.AirUnit);
                 Functions.RequestBackup(suspect.Position, LSPD_First_Response.EBackupResponseType.Pursuit, LSPD_First_Response.EBackupUnitType.LocalUnit);
-            }
+				ScannerHelper.DisplayDispatchDialogue("Dispatch", "Suspect fleeing. Sending backup and air unit.");
+			}
 
             if(pursuited && pursuit != null && !Functions.IsPursuitStillRunning(pursuit))
             {
@@ -87,7 +89,6 @@ namespace HotCalloutsV.Callouts
             if (prisoner.Exists()) prisoner.Dismiss();
             if (suspect.Exists()) suspect.Dismiss();
             if (suspectCar.Exists()) suspectCar.Dismiss();
-            if (blip.Exists()) blip.Delete();
         }
     }
 }

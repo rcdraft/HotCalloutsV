@@ -72,7 +72,12 @@ namespace HotCalloutsV.Callouts
         public override void End()
         {
             base.End();
-            if (suspect.Exists() && !Functions.IsPedArrested(suspect)) suspect.Dismiss();
+			ScannerHelper.ReportNormalCode4("Firearm attack on officer");
+            if (suspect.Exists())
+			{
+				if(suspectBlip.Exists()) suspectBlip.Delete();
+				if(!Functions.IsPedArrested(suspect)) suspect.Dismiss();
+			}
             if (officer.Exists()) officer.Dismiss();
         }
     }

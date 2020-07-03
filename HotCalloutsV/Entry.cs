@@ -36,7 +36,7 @@ namespace HotCalloutsV
             Game.LogTrivial("[HotCallouts] It has features that has not production ready yet and most likely to crash the LSPDFR, the plugin itself, or the whole game.");
             Game.LogTrivial("[HotCallouts] USE WITH CAUTION, AND REPORT ISSUE IF YOU FOUND AN UNREPORTED BUG OR CRASH / DISREGARD");
             Game.LogTrivial("[HotCallouts] MAKE SURE YOU HAVE A PLUGIN WITH END CALLOUT FEATURE AND FADE IN FEATURE READY.");
-            Game.DisplayNotification("web_lossantospolicedept", "web_lossantospolicedept", "HotCallouts", "Debug build detected. This usually means extra features but with less stable. Use with caution.");
+            Game.DisplayNotification("web_lossantospolicedept", "web_lossantospolicedept", "HotCallouts", "Debug Build", "Debug build detected. This usually means extra features but with less stable. Use with caution.");
 #endif
             AppDomain.CurrentDomain.AssemblyResolve += Integreate.Resolve;
             Game.LogTrivial("[Integreate/HotCallouts] Wait 3 millseconds to get all plugins to load");
